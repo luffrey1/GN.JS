@@ -2,12 +2,14 @@
     "name": "gn-bot",
     "version": "1.0.0",
     "description": "Para guardia nacional",
-    "main": "index.js", 
+    "main": "index.js",
     "scripts": {
-      "start": "node index.js" 
+        "start": "node index.js"
     },
     "dependencies": {
-      "pg": "^8.7.1"
+        "discord.js": "^14.15.3",
+        "mongodb": "^6.8.0",
+        "mysql2": "^3.11.0",
+        "pg": "^8.7.1"
     }
-  }
-  
+}

@@ -1,6 +1,4 @@
-require('dotenv').config();
-const { REST } = require('@discordjs/rest');
-const { Routes } = require('discord-api-types/v10');
+const { REST, Routes } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
 const config = require('./config.json');
@@ -9,39 +7,15 @@ const clientId = config.CLIENT_ID;
 const guildId = config.GUILD_ID;
 const token = config.BOT_TOKEN;
 
-const commands = [
-    {
-        name: 'ascenso',
-        description: 'Asciende a un usuario a un nuevo rango.',
-        options: [
-            {
-                type: 6, // Tipo de opción: Usuario
-                name: 'usuario',
-                description: 'El usuario que será ascendido',
-                required: true,
-            },
-            {
-                type: 3, // Tipo de opción: String
-                name: 'rango_anterior',
-                description: 'El rango previo del usuario',
-                required: true,
-            },
-            {
-                type: 3, // Tipo de opción: String
-                name: 'rango_nuevo',
-                description: 'El nuevo rango del usuario',
-                required: true,
-            },
-            {
-                type: 3, // Tipo de opción: String
-                name: 'motivo',
-                description: 'Motivo del ascenso',
-                required: true,
-            },
-        ],
-    },
-    // Agrega más comandos aquí si es necesario
-];
+const commands = [];
+const commandsPath = path.join(__dirname, 'commands');
+const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+
+for (const file of commandFiles) {
+    const filePath = path.join(commandsPath, file);
+    const command = require(filePath);
+    commands.push(command.data.toJSON());
+}
 
 const rest = new REST({ version: '10' }).setToken(token);
 
@@ -55,6 +29,6 @@ const rest = new REST({ version: '10' }).setToken(token);
 
         console.log('Successfully reloaded application (/) commands.');
     } catch (error) {
-        console.error('Error al registrar comandos:', error);
+        console.error('Error al registrar los comandos:', error);
     }
 })();
